@@ -3,7 +3,21 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>AGATHA TEZZA PROMPTS</title>
+    
+    <!-- Meta Tags para Prévia Limpa no Instagram/WhatsApp -->
+    <title>AGATHA LECLERC • TEZZA PROMPTS</title>
+    <meta name="description" content="TEZZA PROMPTS OFICIAL">
+    
+    <!-- Open Graph (Facebook/Instagram) -->
+    <meta property="og:title" content="AGATHA LECLERC • TEZZA PROMPTS">
+    <meta property="og:description" content="TEZZA PROMPTS OFICIAL">
+    <meta property="og:type" content="website">
+    
+    <!-- Twitter -->
+    <meta name="twitter:card" content="summary">
+    <meta name="twitter:title" content="AGATHA LECLERC • TEZZA PROMPTS">
+    <meta name="twitter:description" content="TEZZA PROMPTS OFICIAL">
+
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Cinzel+Decorative:wght@400;700;900&family=Bodoni+Moda:ital,opsz,wght@0,6..96,400..900;1,6..96,400..900&family=Montserrat:wght@300;400;700&family=Marcellus&display=swap" rel="stylesheet">
@@ -414,6 +428,7 @@
 <strong>GEMINI [MODO PRO]</strong>
 
 [COLOQUE O SEU PROMPT AQUI ]
+    
 
 </pre>
             </div>
@@ -428,7 +443,6 @@
     </div>
 
     <div id="musicPlayerContainer">
-        <!-- Áudio configurado para loop -->
         <audio id="bgMusic" loop>
             <source src="music.mp3" type="audio/mpeg">
             Seu navegador não suporta o elemento de áudio.
@@ -458,14 +472,12 @@
             const splash = document.getElementById('splashScreen');
             const music = document.getElementById('bgMusic');
             
-            // Iniciar a música
             if (music) {
                 music.play().catch(error => {
-                    console.warn("Autoplay bloqueado pelo navegador. A música tocará após interação.", error);
+                    console.warn("Autoplay bloqueado.", error);
                 });
             }
             
-            // Esconder Splash Screen
             splash.style.opacity = '0';
             setTimeout(() => {
                 splash.style.display = 'none';
@@ -478,19 +490,15 @@
             const originalBtnText = "Copiar Prompt";
             const notification = document.getElementById('notification');
             
-            // Texto a ser copiado
             const textToCopy = promptText + "\n\n@agatha.avu";
             
-            // Tentar copiar com Clipboard API (método moderno)
             if (navigator.clipboard && navigator.clipboard.writeText) {
                 navigator.clipboard.writeText(textToCopy).then(() => {
                     executarMudancaBotao();
                 }).catch(err => {
-                    console.warn('Clipboard API falhou, usando fallback:', err);
                     fallbackCopy(textToCopy);
                 });
             } else {
-                // Fallback para navegadores antigos
                 fallbackCopy(textToCopy);
             }
 
@@ -502,29 +510,22 @@
                     document.execCommand('copy');
                     executarMudancaBotao();
                 } catch (err) {
-                    console.error('Erro ao copiar:', err);
-                    alert('Erro ao copiar o prompt. Tente novamente.');
+                    alert('Erro ao copiar o prompt.');
                 }
             }
 
             function executarMudancaBotao() {
-                // Mudar texto do botão
                 copyBtn.innerText = "PROMPT COPIADO COM SUCESSO MARQUE @agatha.avu";
                 copyBtn.classList.add('copied');
-
-                // Mostrar notificação com efeito
                 notification.classList.add('show');
 
-                // Resetar animação de arranhão reinjetando as linhas
                 const scratchMark = document.querySelector('.scratch-mark');
-                scratchMark.innerHTML = '';
                 scratchMark.innerHTML = `
                     <div class="scratch-line scratch-1"></div>
                     <div class="scratch-line scratch-2"></div>
                     <div class="scratch-line scratch-3"></div>
                 `;
 
-                // Esconder notificação e resetar botão após 3 segundos
                 setTimeout(() => {
                     notification.classList.remove('show');
                     copyBtn.innerText = originalBtnText;
