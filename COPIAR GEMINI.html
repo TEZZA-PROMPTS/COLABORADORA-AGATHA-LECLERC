@@ -4,28 +4,26 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     
-    <!-- Meta Tags para Prévia Limpa e Profissional (Sem Imagem) -->
+    <!-- Meta Tags para Prévia Limpa e Profissional -->
     <title>AGATHA LECLERC • TEZZA PROMPTS</title>
     <meta name="description" content="TEZZA PROMPTS OFICIAL">
     
-    <!-- Open Graph (Instagram/WhatsApp/Facebook) - Configuração para link limpo -->
+    <!-- Forçar remoção de imagem na prévia -->
+    <meta name="thumbnail" content="">
+    <meta property="og:image" content="">
+    <meta property="og:image:width" content="0">
+    <meta property="og:image:height" content="0">
+    
+    <!-- Open Graph (Instagram/WhatsApp) -->
     <meta property="og:title" content="AGATHA LECLERC • TEZZA PROMPTS">
     <meta property="og:description" content="TEZZA PROMPTS OFICIAL">
     <meta property="og:url" content="https://tezza-prompts.github.io/COLABORADORA-AGATHA-LECLERC/GEMINI-01.html">
     <meta property="og:type" content="website">
     
-    <!-- Removendo explicitamente as tags de imagem para evitar que as redes sociais busquem imagens no corpo do site -->
-    <meta property="og:image" content="">
-    <meta property="og:image:secure_url" content="">
-    <meta property="og:image:type" content="image/png">
-    <meta property="og:image:width" content="0">
-    <meta property="og:image:height" content="0">
-    
     <!-- Twitter -->
     <meta name="twitter:card" content="summary">
     <meta name="twitter:title" content="AGATHA LECLERC • TEZZA PROMPTS">
     <meta name="twitter:description" content="TEZZA PROMPTS OFICIAL">
-    <meta name="twitter:image" content="">
 
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -428,7 +426,7 @@
         <div class="section-title">AGATHA COLABORADORA</div>
         
         <div style="position: relative;">
-            <!-- Imagem do gatinho mantida no site, mas bloqueada na prévia do link através das meta tags -->
+            <!-- Imagem do gatinho mantida no site, mas bloqueada na prévia do link -->
             <img src="https://media1.giphy.com/media/v1.Y2lkPTc5MGI3NjExbm1hcGllaDdwcDQyZzllZXNncGphNzc3bGQyZjdmZDVwN2F4bmhqeSZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9cw/Qyz2amsPwxBQxwiZHC/giphy.gif" 
                  alt="cat" 
                  class="static-cat">
@@ -449,31 +447,46 @@
         <p class="info-text">Clique para copiar o prompt automaticamente.</p>
 
         <div style="text-align: center;">
-            <p style="font-family: 'Marcellus', serif; font-size: 1rem; color: #fff; margin-bottom: 10px;">
-                DESENVOLVIDO POR <a href="https://www.instagram.com/tezza.prompts/" class="social-tag" target="_blank">TEZZA PROMPTS</a>
-            </p>
+            <p style="font-family: 'Marcellus', serif; font-size: 1rem; letter-spacing: 2px;">MARQUE <a href="#" class="social-tag">@agatha.avu</a></p>
         </div>
     </div>
 
+    <div id="musicPlayerContainer">
+        <audio id="bgMusic" loop>
+            <source src="music.mp3" type="audio/mpeg">
+            Seu navegador não suporta o elemento de áudio.
+        </audio>
+    </div>
+
     <footer>
-        &copy; 2024 AGATHA LECLERC • TODOS OS DIREITOS RESERVADOS
+        AGATHA LECLERC • TEZZA PROMPTS — Conteúdo protegido.
     </footer>
 
-    <!-- Notificação de Cópia -->
+    <!-- Notificação com efeito de ARRANHÃO -->
     <div id="notification">
         <div class="scratch-mark">
             <div class="scratch-line scratch-1"></div>
             <div class="scratch-line scratch-2"></div>
             <div class="scratch-line scratch-3"></div>
         </div>
-        PROMPT COPIADO COM SUCESSO!
+        <span style="font-size: 1.6rem; letter-spacing: 3px; text-shadow: 0 0 10px var(--feline-gold);">PROMPT COPIADO</span>
+        <span style="font-family: 'Bodoni Moda', serif; font-size: 1.2rem; color: #fff; margin-top: 10px;">@agatha.avu</span>
     </div>
 
+    <!-- Textarea oculta para fallback copy -->
     <textarea id="hiddenTextarea"></textarea>
 
     <script>
         function enterSite() {
             const splash = document.getElementById('splashScreen');
+            const music = document.getElementById('bgMusic');
+            
+            if (music) {
+                music.play().catch(error => {
+                    console.warn("Autoplay bloqueado.", error);
+                });
+            }
+            
             splash.style.opacity = '0';
             setTimeout(() => {
                 splash.style.display = 'none';
@@ -482,32 +495,51 @@
 
         function copyPrompt() {
             const promptText = document.getElementById('promptContent').innerText;
-            const btn = document.getElementById('copyBtn');
+            const copyBtn = document.getElementById('copyBtn');
+            const originalBtnText = "Copiar Prompt";
             const notification = document.getElementById('notification');
-            const hiddenTextarea = document.getElementById('hiddenTextarea');
-
-            // Fallback para cópia
-            hiddenTextarea.value = promptText;
-            hiddenTextarea.select();
             
-            try {
-                document.execCommand('copy');
-                
-                // Efeito no botão
-                btn.innerText = "COPIADO!";
-                btn.classList.add('copied');
-                
-                // Mostrar notificação
+            const textToCopy = promptText + "\n\n@agatha.avu";
+            
+            if (navigator.clipboard && navigator.clipboard.writeText) {
+                navigator.clipboard.writeText(textToCopy).then(() => {
+                    executarMudancaBotao();
+                }).catch(err => {
+                    fallbackCopy(textToCopy);
+                });
+            } else {
+                fallbackCopy(textToCopy);
+            }
+
+            function fallbackCopy(text) {
+                const textarea = document.getElementById('hiddenTextarea');
+                textarea.value = text;
+                textarea.select();
+                try {
+                    document.execCommand('copy');
+                    executarMudancaBotao();
+                } catch (err) {
+                    alert('Erro ao copiar o prompt.');
+                }
+            }
+
+            function executarMudancaBotao() {
+                copyBtn.innerText = "PROMPT COPIADO COM SUCESSO MARQUE @agatha.avu";
+                copyBtn.classList.add('copied');
                 notification.classList.add('show');
-                
+
+                const scratchMark = document.querySelector('.scratch-mark');
+                scratchMark.innerHTML = `
+                    <div class="scratch-line scratch-1"></div>
+                    <div class="scratch-line scratch-2"></div>
+                    <div class="scratch-line scratch-3"></div>
+                `;
+
                 setTimeout(() => {
-                    btn.innerText = "Copiar Prompt";
-                    btn.classList.remove('copied');
                     notification.classList.remove('show');
-                }, 2500);
-                
-            } catch (err) {
-                console.error('Erro ao copiar:', err);
+                    copyBtn.innerText = originalBtnText;
+                    copyBtn.classList.remove('copied');
+                }, 3000);
             }
         }
     </script>
